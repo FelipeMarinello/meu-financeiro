@@ -1,1 +1,26 @@
-
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Gerar ícones</title>
+<style>body{font-family:system-ui;background:#07070D;color:#fff;text-align:center;padding:30px}canvas{border-radius:22%;margin:10px;box-shadow:0 20px 50px -10px rgba(0,0,0,.6)}a{display:inline-block;margin:8px;padding:12px 18px;border-radius:12px;background:#8B5CF6;color:#fff;text-decoration:none;font-weight:700}input{margin:6px}</style></head>
+<body><h2>Ícones do Meu Financeiro</h2>
+<p>Cores: <input type="color" id="c1" value="#8B5CF6"> <input type="color" id="c2" value="#06B6D4"></p>
+<canvas id="cv" width="512" height="512" style="width:200px;height:200px"></canvas><br>
+<a id="d512" download="icon-512.png">Baixar icon-512.png</a><a id="d180" download="icon-180.png">Baixar icon-180.png</a>
+<script>
+function desenhar(tam) {
+  var c = document.createElement('canvas'); c.width = c.height = tam; var x = c.getContext('2d'), s = tam / 512;
+  var g = x.createLinearGradient(0, 0, tam, tam); g.addColorStop(0, document.getElementById('c1').value); g.addColorStop(1, document.getElementById('c2').value);
+  x.fillStyle = g; x.fillRect(0, 0, tam, tam);
+  var rg = x.createRadialGradient(tam * .8, tam * .15, 0, tam * .8, tam * .15, tam * .6); rg.addColorStop(0, 'rgba(255,255,255,.35)'); rg.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = rg; x.fillRect(0, 0, tam, tam);
+  x.fillStyle = '#fff';
+  x.fillRect(120 * s, 150 * s, 272 * s, 30 * s); x.fillRect(120 * s, 150 * s, 30 * s, 212 * s); x.fillRect(120 * s, 332 * s, 272 * s, 30 * s); x.fillRect(362 * s, 150 * s, 30 * s, 60 * s); x.fillRect(362 * s, 302 * s, 30 * s, 60 * s);
+  x.fillRect(250 * s, 210 * s, 170 * s, 92 * s);
+  x.fillStyle = g; x.beginPath(); x.arc(330 * s, 256 * s, 18 * s, 0, Math.PI * 2); x.fill();
+  return c;
+}
+function atualizar() {
+  var a = desenhar(512); var v = document.getElementById('cv').getContext('2d'); v.clearRect(0, 0, 512, 512); v.drawImage(a, 0, 0);
+  document.getElementById('d512').href = a.toDataURL('image/png'); document.getElementById('d180').href = desenhar(180).toDataURL('image/png');
+}
+document.getElementById('c1').oninput = atualizar; document.getElementById('c2').oninput = atualizar; atualizar();
+</script></body></html>
+===== FIM gerar-icones.html =====
