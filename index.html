@@ -17,7 +17,8 @@
 :root{--bg:#07070D;--p1:#8B5CF6;--p2:#06B6D4}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;width:100%;position:fixed;background:var(--bg);overflow:hidden;overscroll-behavior:none;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#F4F4F8;transition:background .6s}
-#wrap{position:fixed;top:0;left:0;right:0;bottom:0;overflow:hidden;background:var(--bg);touch-action:pan-y}
+#topo{position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top);background:var(--bg);z-index:4;transition:background .6s}
+#wrap{position:fixed;top:env(safe-area-inset-top);left:0;right:0;bottom:0;overflow:hidden;background:var(--bg);touch-action:pan-y}
 #app{display:block;width:1px;min-width:100%;max-width:100%;height:100%;border:0;background:var(--bg);opacity:0;transition:opacity .6s}
 #app.on{opacity:1}
 #splash{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;background:var(--bg);z-index:5;transition:opacity .6s,visibility .6s}
@@ -56,12 +57,14 @@ small{color:#8A8AA6;font-size:13px}
   <a class="btn sec" id="bDireto" href="#" target="_blank">Abrir painel no Safari</a>
 </div></div>
 
-<div id="wrap"><iframe id="app" allow="camera; clipboard-write" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+<div id="topo"></div><div id="wrap"><iframe id="app" allow="camera; clipboard-write" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
 
 <script>
 // ▼▼▼ COLE AQUI O LINK DO SEU WEB APP (termina em /exec) ▼▼▼
 var URL_APP = 'https://script.google.com/macros/s/AKfycbz-OslcfjubJedvRAFoEtSxoZvMnYjXlv9gW2i26mntS7_RxatEi95FKHjDLr44SReZgg/exec';
 // ▲▲▲
+// Se aparecer no topo a faixa do Google "Este aplicativo foi criado por um usuário do Google Apps Script", troque 0 por 50
+var CORTE_BANNER = 0;
 
 var pronto = false, tLimite = null;
 function $(i) { return document.getElementById(i); }
@@ -106,6 +109,7 @@ document.addEventListener('visibilitychange', function () {
 });
 
 (function init() {
+  if (CORTE_BANNER > 0) { $('app').style.marginTop = (-CORTE_BANNER) + 'px'; $('app').style.height = 'calc(100% + ' + CORTE_BANNER + 'px)'; }
   try { var c = JSON.parse(localStorage.getItem('mf_cores') || '{}'); aplicarCores(c.bg, c.p1, c.p2); } catch (e) {}
   if (URL_APP.indexOf('/exec') === -1) { $('msg').textContent = 'Configure o link do Web App no index.html'; return; }
   $('bLogin').href = 'https://accounts.google.com/ServiceLogin?continue=' + encodeURIComponent(URL_APP);
